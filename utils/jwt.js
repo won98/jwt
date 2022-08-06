@@ -3,32 +3,35 @@ require("dotenv").config();
 //const { Users } = require("../models");
 const { ACCESS_KEY, REFRESH_KEY } = process.env;
 
-const createToken = (user) => {
-  //const { id } = req.body;
-  const payload = {
-    // createToken에 들어갈 payload
-    id: user.id,
-  };
-  const token = jwt.sign(payload, ACCESS_KEY, {
-    algorithm: "HS256",
-    expiresIn: "1m",
-  });
-  return token;
-};
+module.exports = {
+  createToken: (payload) => {
+    //const { id } = req.body;
+    const token = jwt.sign(
+      {
+        user_id: payload.user_id,
+        id: payload.id,
+      },
+      ACCESS_KEY,
+      {
+        algorithm: "HS256",
+        expiresIn: "1m",
+      }
+    );
+    return token;
+  },
 
-const creatRefreshToken = () => {
-  const retoken = jwt.sign({}, REFRESH_KEY, {
-    algorithm: "HS256",
-    expiresIn: "1d",
-  });
-  return retoken;
+  creatRefreshToken: (payload) => {
+    const retoken = jwt.sign({ user_id: payload.id }, REFRESH_KEY, {
+      algorithm: "HS256",
+      expiresIn: "1d",
+    });
+    return retoken;
+  },
+  verifyRefreshToken: (token) => {
+    if (!token) {
+      return "";
+    }
+    let decoded = jwt.verify(token, REFRESH_KEY);
+    return decoded;
+  },
 };
-const issues = (token, res) => {
-  return jwt.verify(token, REFRESH_KEY, (err, user) => {
-    if (err) res.sendStatus(403);
-    const key = this.access(user.id);
-    return key;
-  });
-};
-
-module.exports = { createToken, creatRefreshToken, issues };

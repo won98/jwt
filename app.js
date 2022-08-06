@@ -43,7 +43,7 @@ app.use("/user", Router.UserRoute);
 //       return res.sendStatus(404);
 //     }
 
-//     req.user = user;
+//     
 //     next();
 //   });
 // };

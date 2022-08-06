@@ -26,6 +26,13 @@ module.exports = {
       console.log(err);
     }
   },
+  verifyRefreshToken: (token) => {
+    if (!token) {
+      return "";
+    }
+    let decoded = jwt.verify(token, REFRESH_KEY);
+    return decoded;
+  },
 };
 // const { verify } = require("../util/jwt");
 

@@ -12,5 +12,6 @@ const router = express.Router();
 router.post("/signup", controller.Signup);
 router.post("/login", controller.Login);
 router.get("/inf", verifyToken);
+router.post("/token", controller.IssueToken);
 router.post("/new", checkTokens);
 module.exports = router;
